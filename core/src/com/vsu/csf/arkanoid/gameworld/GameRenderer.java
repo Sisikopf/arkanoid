@@ -3,11 +3,14 @@ package com.vsu.csf.arkanoid.gameworld;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.vsu.csf.arkanoid.gamehelpers.AssetLoader;
-import com.vsu.csf.arkanoid.gameobjects.Ball;
-import com.vsu.csf.arkanoid.gameobjects.Platform;
+import com.vsu.csf.arkanoid.gameobjects.*;
+
+import java.util.List;
 
 /**
  * Created by dimko_000 on 16.12.2015.
@@ -38,6 +41,7 @@ public class GameRenderer {
 
         Platform platform = world.getPlatform();
         Ball ball = world.getBall();
+        List<Block> blockList = world.getBlocks();
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -53,6 +57,30 @@ public class GameRenderer {
 
         batcher.disableBlending();
         batcher.draw(AssetLoader.bg, 0, 0, GameWorld.GAME_WIDTH, GameWorld.GAME_HEIGHT);
+
+        for (Block b : blockList) {
+            TextureRegion region = AssetLoader.undestructableBlock;
+            if (b.getClass().equals(DestructableBlock.class)){
+                switch (((DestructableBlock)b).getBlockType()) {
+                    case LIGHT: region = AssetLoader.lightBlock; break;
+                    case MEDIUM:
+                        if (((DestructableBlock) b).getHealth() == 2)
+                            region = AssetLoader.mediumBlock1;
+                        else
+                            region = AssetLoader.mediumBlock2;
+                        break;
+                    case HEAVY:
+                        if (((DestructableBlock) b).getHealth() == 3)
+                            region = AssetLoader.heavyBlock1;
+                        else if (((DestructableBlock) b).getHealth() == 2)
+                            region = AssetLoader.heavyBlock2;
+                        else
+                            region = AssetLoader.heavyBlock3;
+                        break;
+                }
+            }
+            batcher.draw(region, b.getPosition().x, b.getPosition().y, b.getWidth(), b.getHeight());
+        }
 
         batcher.enableBlending();
 

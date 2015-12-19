@@ -9,7 +9,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  */
 public class AssetLoader {
     public static Texture texture;
-    public static TextureRegion bg, platform, ball;
+    public static TextureRegion bg, platform, ball,
+            undestructableBlock, lightBlock,
+            mediumBlock1, mediumBlock2,
+            heavyBlock1, heavyBlock2, heavyBlock3;
 
     public static void load() {
 
@@ -17,13 +20,21 @@ public class AssetLoader {
         texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         bg = new TextureRegion(texture, 0, 0, 18, 18);
-        bg.flip(false, false);
 
         platform = new TextureRegion(texture, 18, 0, 30, 5);
-        platform.flip(false, false);
 
         ball = new TextureRegion(texture, 48, 0, 30, 30);
-        ball.flip(false, false);
+
+        undestructableBlock = new TextureRegion(texture, 78, 0, 40, 20);
+
+        lightBlock = new TextureRegion(texture, 118, 0, 40, 20);
+
+        mediumBlock1 = new TextureRegion(texture, 158, 0, 40, 20);
+        mediumBlock2 = new TextureRegion(texture, 158, 20, 40, 20);
+
+        heavyBlock1 = new TextureRegion(texture, 198, 0, 40, 20);
+        heavyBlock2 = new TextureRegion(texture, 198, 20, 40, 20);
+        heavyBlock3 = new TextureRegion(texture, 198, 40, 40, 20);
     }
 
     public static void dispose() {
