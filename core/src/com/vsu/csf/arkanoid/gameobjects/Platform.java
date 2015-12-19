@@ -1,6 +1,8 @@
 package com.vsu.csf.arkanoid.gameobjects;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.vsu.csf.arkanoid.gameworld.GameWorld;
 
 /**
  * Created by Andrey on 19.12.2015.
@@ -12,6 +14,8 @@ public class Platform {
     private float width;
     private float height;
 
+    private Rectangle boundingRectangle;
+
     private float move;
 
     public Platform(float x, float y, float speed, float width, float height) {
@@ -19,14 +23,16 @@ public class Platform {
         this.speed = speed;
         this.width = width;
         this.height = height;
+
+        boundingRectangle = new Rectangle();
     }
 
     public Vector2 getPosition() {
         return position;
     }
 
-    public void setPosition(float y) {
-        position = new Vector2(position.x, y);
+    public void setPosition(float x) {
+        position = new Vector2(x, position.y);
     }
 
     public float getSpeed() {
@@ -51,6 +57,7 @@ public class Platform {
 
     public void update(float delta) {
         position.x += speed * move * delta;
+        boundingRectangle.set(position.x - width / 2, position.y - height / 2, width, height);
     }
 
     public void moveLeft() {
@@ -63,5 +70,9 @@ public class Platform {
 
     public void stop() {
         move = 0;
+    }
+
+    public Rectangle getBoundingRectangle() {
+        return boundingRectangle;
     }
 }

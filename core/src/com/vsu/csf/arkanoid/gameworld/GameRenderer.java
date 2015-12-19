@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.vsu.csf.arkanoid.gamehelpers.AssetLoader;
+import com.vsu.csf.arkanoid.gameobjects.Ball;
 import com.vsu.csf.arkanoid.gameobjects.Platform;
 
 /**
@@ -33,9 +34,10 @@ public class GameRenderer {
     }
 
     public void render() {
-        Gdx.app.log(TAG, "render");
+        //Gdx.app.log(TAG, "render");
 
         Platform platform = world.getPlatform();
+        Ball ball = world.getBall();
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -45,7 +47,6 @@ public class GameRenderer {
         // background
         shapeRenderer.setColor(0, 0, 0, 1);
         shapeRenderer.rect(0, 0, GameWorld.GAME_WIDTH, GameWorld.GAME_HEIGHT);
-
         shapeRenderer.end();
 
         batcher.begin();
@@ -54,8 +55,12 @@ public class GameRenderer {
         batcher.draw(AssetLoader.bg, 0, 0, GameWorld.GAME_WIDTH, GameWorld.GAME_HEIGHT);
 
         batcher.enableBlending();
+
         batcher.draw(AssetLoader.platform, platform.getPosition().x - platform.getWidth() / 2,
-                platform.getPosition().y - platform.getHeight(), platform.getWidth(), platform.getHeight());
+                platform.getPosition().y - platform.getHeight() / 2, platform.getWidth(), platform.getHeight());
+
+        batcher.draw(AssetLoader.ball, ball.getPosition().x - ball.getRadius(), ball.getPosition().y - ball.getRadius(),
+                ball.getRadius() * 2, ball.getRadius() * 2);
 
         batcher.end();
     }

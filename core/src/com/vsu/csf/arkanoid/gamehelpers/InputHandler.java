@@ -2,30 +2,32 @@ package com.vsu.csf.arkanoid.gamehelpers;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.vsu.csf.arkanoid.gameobjects.Ball;
 import com.vsu.csf.arkanoid.gameobjects.Platform;
 import com.vsu.csf.arkanoid.gameworld.GameWorld;
 
 import static com.badlogic.gdx.Input.Keys.LEFT;
 import static com.badlogic.gdx.Input.Keys.RIGHT;
+import static com.badlogic.gdx.Input.Keys.SPACE;
 
 /**
  * Created by Andrey on 19.12.2015.
  */
 public class InputHandler implements InputProcessor {
-    private Platform platform;
+    private GameWorld world;
 
-    public InputHandler(Platform platform) {
-        this.platform = platform;
+    public InputHandler(GameWorld world) {
+        this.world = world;
     }
 
     @Override
     public boolean keyDown(int keycode) {
         switch (keycode) {
             case LEFT :
-                platform.moveLeft();
+                world.getPlatform().moveLeft();
                 break;
             case RIGHT :
-                platform.moveRight();
+                world.getPlatform().moveRight();
                 break;
         }
         return true;
@@ -36,7 +38,10 @@ public class InputHandler implements InputProcessor {
         switch (keycode) {
             case LEFT :
             case RIGHT :
-                platform.stop();
+                world.getPlatform().stop();
+                break;
+            case SPACE:
+                world.getBall().start();
                 break;
         }
         return true;
