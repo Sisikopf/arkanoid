@@ -3,65 +3,60 @@ package com.vsu.csf.arkanoid.gameworld;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.vsu.csf.arkanoid.gamehelpers.AssetLoader;
+import com.vsu.csf.arkanoid.gameobjects.Platform;
 
 /**
  * Created by dimko_000 on 16.12.2015.
  */
 public class GameRenderer {
-    private GameWorld myWorld;
+    private final static String TAG = "GameRenderer";
+
+    private GameWorld world;
     private OrthographicCamera cam;
     private ShapeRenderer shapeRenderer;
-    private final static String TAG = "GameRenderer";
+
+    private SpriteBatch batcher;
+
     public GameRenderer(GameWorld world) {
-        myWorld = world;
+        this.world = world;
         cam = new OrthographicCamera();
         cam.setToOrtho(true, 300, 300);
+
+        batcher = new SpriteBatch();
+        batcher.setProjectionMatrix(cam.combined);
+
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(cam.combined);
     }
+
     public void render() {
         Gdx.app.log(TAG, "render");
 
-        /*
-         * 1. Мы рисуем черный задний фон, чтобы избавится от моргания и следов от передвигающихся объектов
-         */
+        Platform platform = world.getPlatform();
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        /*
-         * 2. Мы отрисовываем однотонный квадрат
-         */
-
-        // Говорим shapeRenderer начинать отрисовывать формы
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-        // Выбираем RGB Color 87, 109, 120, не прозрачный
-        shapeRenderer.setColor(87 / 255.0f, 109 / 255.0f, 120 / 255.0f, 1);
-
-        // Отрисовываем квадрат из myWorld (Используем ShapeType.Filled)
-        shapeRenderer.rect(myWorld.getRect().x, myWorld.getRect().y,
-                myWorld.getRect().width, myWorld.getRect().height);
-
-        // говорим shapeRenderer прекратить отрисовку
-        // Мы ДОЛЖНЫ каждый раз это делать
-        shapeRenderer.end();
-
-        /*
-         * 3. Мы отрисовываем рамку для квадрата
-         */
-
-        // Говорим shapeRenderer нарисовать рамку следующей формы
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-
-        // Выбираем цвет RGB Color 255, 109, 120, не прозрачный
-        shapeRenderer.setColor(255 / 255.0f, 109 / 255.0f, 120 / 255.0f, 1);
-
-        // Отрисовываем квадрат из myWorld (Using ShapeType.Line)
-        shapeRenderer.rect(myWorld.getRect().x, myWorld.getRect().y,
-                myWorld.getRect().width, myWorld.getRect().height);
+        // background
+        shapeRenderer.setColor(0, 0, 0, 1);
+        shapeRenderer.rect(0, 0, GameWorld.GAME_WIDTH, GameWorld.GAME_HEIGHT);
 
         shapeRenderer.end();
+
+        batcher.begin();
+
+        batcher.disableBlending();
+        batcher.draw(AssetLoader.bg, 0, 0, GameWorld.GAME_WIDTH, GameWorld.GAME_HEIGHT);
+
+        batcher.enableBlending();
+        batcher.draw(AssetLoader.platform, platform.getPosition().x - platform.getWidth() / 2,
+                platform.getPosition().y - platform.getHeight(), platform.getWidth(), platform.getHeight());
+
+        batcher.end();
     }
 }

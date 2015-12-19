@@ -3,6 +3,7 @@ package com.vsu.csf.arkanoid.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.vsu.csf.arkanoid.gamehelpers.InputHandler;
 import com.vsu.csf.arkanoid.gameworld.GameRenderer;
 import com.vsu.csf.arkanoid.gameworld.GameWorld;
 
@@ -13,10 +14,13 @@ public class GameScreen implements Screen{
     private final static String TAG = "GameScreen";
     private GameWorld world;
     private GameRenderer renderer;
+
     public GameScreen() {
         Gdx.app.log(TAG,"Attached");
         world = new GameWorld();
         renderer = new GameRenderer(world);
+
+        Gdx.input.setInputProcessor(new InputHandler(world.getPlatform()));
     }
 
     @Override
