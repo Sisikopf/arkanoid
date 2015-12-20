@@ -36,7 +36,6 @@ public class Level {
             reader = new BufferedReader(fileReader);
             int i = 0;
             while ((line = reader.readLine()) != null) {
-                Gdx.app.log(TAG, line);
                 for (int k = 0; k < line.length(); k++) {
                     float x = blockWidth * k;
                     float y = blockHeight * i;

@@ -67,10 +67,11 @@ public class GameWorld {
 
         List<Block> destroyed = new ArrayList<Block>();
 
-        for (Block b : level.getBlocks()) {
-            if (b.intersect(ball)) {
-                score += b.getScore();
-                destroyed.add(b);
+        float ballAngle = ball.getAngle();
+        for (Block block : level.getBlocks()) {
+            if (block.intersect(ball, ballAngle)) {
+                score += block.getScore();
+                destroyed.add(block);
             }
         }
 
@@ -108,7 +109,7 @@ public class GameWorld {
             platform.setPosition(GAME_WIDTH - platform.getWidth() / 2);
         }
 
-        Gdx.app.log(TAG, String.valueOf(ball.getAngle()));
+        //Gdx.app.log(TAG, String.valueOf(ball.getAngle()));
     }
 
     public Platform getPlatform(){
