@@ -76,4 +76,11 @@ public class Level {
         }
         return level;
     }
+
+    public int getDestructableBlocksCount() {
+        int k = 0;
+        for (Block b : blockList)
+            if (b.getClass().equals(DestructableBlock.class)) k++;
+        return k;
+    }
 }

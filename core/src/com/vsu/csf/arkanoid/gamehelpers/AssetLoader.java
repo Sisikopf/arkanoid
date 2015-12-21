@@ -2,6 +2,7 @@ package com.vsu.csf.arkanoid.gamehelpers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
@@ -13,6 +14,8 @@ public class AssetLoader {
             undestructableBlock, lightBlock,
             mediumBlock1, mediumBlock2,
             heavyBlock1, heavyBlock2, heavyBlock3;
+
+    public static BitmapFont font, shadow;
 
     public static void load() {
 
@@ -35,9 +38,16 @@ public class AssetLoader {
         heavyBlock1 = new TextureRegion(texture, 198, 0, 40, 20);
         heavyBlock2 = new TextureRegion(texture, 198, 20, 40, 20);
         heavyBlock3 = new TextureRegion(texture, 198, 40, 40, 20);
+
+        font = new BitmapFont(Gdx.files.internal("font/text.fnt"));
+        font.getData().setScale(.25f, -.25f);
+        shadow = new BitmapFont(Gdx.files.internal("font/shadow.fnt"));
+        shadow.getData().setScale(.25f, -.25f);
     }
 
     public static void dispose() {
         texture.dispose();
+        font.dispose();
+        shadow.dispose();
     }
 }

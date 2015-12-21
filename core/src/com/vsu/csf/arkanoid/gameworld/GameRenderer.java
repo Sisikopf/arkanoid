@@ -1,9 +1,12 @@
 package com.vsu.csf.arkanoid.gameworld;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -17,6 +20,9 @@ import java.util.List;
  */
 public class GameRenderer {
     private final static String TAG = "GameRenderer";
+
+    public final float SCORE_POS_X = 11;
+    public final float SCORE_POS_Y = 6;
 
     private GameWorld world;
     private OrthographicCamera cam;
@@ -40,7 +46,7 @@ public class GameRenderer {
         //Gdx.app.log(TAG, "render");
 
         Platform platform = world.getPlatform();
-        Ball ball = world.getBall();
+        List<Ball> balls = world.getBalls();
         List<Block> blockList = world.getBlocks();
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -58,6 +64,7 @@ public class GameRenderer {
         batcher.disableBlending();
         batcher.draw(AssetLoader.bg, 0, 0, GameWorld.GAME_WIDTH, GameWorld.GAME_HEIGHT);
 
+        // Blocks
         for (Block b : blockList) {
             TextureRegion region = AssetLoader.undestructableBlock;
             if (b.getClass().equals(DestructableBlock.class)){
@@ -84,11 +91,33 @@ public class GameRenderer {
 
         batcher.enableBlending();
 
+        // Platform
         batcher.draw(AssetLoader.platform, platform.getPosition().x - platform.getWidth() / 2,
                 platform.getPosition().y - platform.getHeight() / 2, platform.getWidth(), platform.getHeight());
 
-        batcher.draw(AssetLoader.ball, ball.getPosition().x - ball.getRadius(), ball.getPosition().y - ball.getRadius(),
+        // Balls
+        for (Ball ball : balls)
+            batcher.draw(AssetLoader.ball, ball.getPosition().x - ball.getRadius(), ball.getPosition().y - ball.getRadius(),
                 ball.getRadius() * 2, ball.getRadius() * 2);
+
+
+        // Game Over message
+        if (!world.isGame()) {
+            // Game Over message
+            String gameOver = String.format("GAME OVER\nYOUR SCORE: %d", world.getScore());
+            GlyphLayout layout = new GlyphLayout(AssetLoader.font, gameOver);
+
+            AssetLoader.shadow.draw(batcher, gameOver, GameWorld.GAME_WIDTH / 2 - layout.width / 2 + 1,
+                    GameWorld.GAME_HEIGHT / 5 * 2 + 1);
+            AssetLoader.font.draw(batcher, gameOver, GameWorld.GAME_WIDTH / 2 - layout.width / 2,
+                    GameWorld.GAME_HEIGHT / 5 * 2);
+        }
+        else {
+            // Score
+            String score = String.valueOf(world.getScore());
+            AssetLoader.shadow.draw(batcher, score, SCORE_POS_X + 1, SCORE_POS_Y + 1);
+            AssetLoader.font.draw(batcher, score, SCORE_POS_X, SCORE_POS_Y);
+        }
 
         batcher.end();
     }

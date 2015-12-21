@@ -41,7 +41,7 @@ public class InputHandler implements InputProcessor {
                 world.getPlatform().stop();
                 break;
             case SPACE:
-                world.getBall().start();
+                world.getBalls().get(0).start();
                 break;
         }
         return true;
