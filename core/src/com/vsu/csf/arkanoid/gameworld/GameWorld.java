@@ -1,17 +1,19 @@
 package com.vsu.csf.arkanoid.gameworld;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.*;
+import com.vsu.csf.arkanoid.gameobjects.bonus.BonusFactory;
 import com.vsu.csf.arkanoid.gameobjects.Ball;
-import com.vsu.csf.arkanoid.gameobjects.Block;
+import com.vsu.csf.arkanoid.gameobjects.block.Block;
 import com.vsu.csf.arkanoid.gameobjects.Level;
 import com.vsu.csf.arkanoid.gameobjects.Platform;
+import com.vsu.csf.arkanoid.gameobjects.bonus.Bonus;
 
+import javax.management.BadAttributeValueExpException;
+import java.io.BufferedOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-import static com.badlogic.gdx.math.MathUtils.cos;
 import static com.badlogic.gdx.math.MathUtils.sin;
 
 /**
@@ -19,7 +21,8 @@ import static com.badlogic.gdx.math.MathUtils.sin;
  */
 public class GameWorld {
     private final static String TAG = "GameWorld";
-
+    private final static double BONUS_PROBABILITY = 0.1;
+    private final static int MAX_BALLS_COUNT = 4;
     public final static float GAME_HEIGHT = 300;
     public final static float GAME_WIDTH = 300;
 
@@ -34,10 +37,20 @@ public class GameWorld {
     public final static float BLOCK_WIDTH = 18.75f;
     public final static float BLOCK_HEIGHT = 9.375f;
 
+    private BonusFactory bonusFactory;
+
+    private Random random;
     private Platform platform;
     private List<Ball> balls;
     private List<Ball> missedBalls;
+    private List<Bonus> bonuses;
+    private List<Block> destroyedBlocks;
+    private List<Bonus> destroyedBonuses;
+    private List<Ball> addedBalls;
     private Level level;
+
+
+
     private int levelNum;
 
     private int lives;
@@ -50,8 +63,14 @@ public class GameWorld {
         left = new Rectangle(0, 0, 1, GAME_HEIGHT);
         right = new Rectangle(GAME_WIDTH - 1, 0, 1, GAME_HEIGHT);
         bottom = new Rectangle(0, GAME_HEIGHT - 1, GAME_WIDTH, 1);
+        random = new Random();
+        bonusFactory = new BonusFactory(random);
         balls = new ArrayList<Ball>();
         missedBalls = new ArrayList<Ball>();
+        bonuses = new ArrayList<Bonus>();
+        destroyedBlocks = new ArrayList<Block>();
+        destroyedBonuses = new ArrayList<Bonus>();
+        addedBalls = new ArrayList<Ball>();
         newGame();
     }
 
@@ -76,6 +95,13 @@ public class GameWorld {
         platform.setPosition(GAME_WIDTH / 2);
     }
 
+    private boolean bonusPlatformIntersection(Bonus bonus, Platform platform) {
+        if(Intersector.overlaps(bonus.getBoundingRectangle(),platform.getBoundingRectangle())) {
+            bonus.action(this);
+            return true;
+        }
+        return false;
+    }
     private void ballWallIntersection(Ball ball) {
         float angle = ball.getAngle();
 
@@ -117,24 +143,43 @@ public class GameWorld {
         //Gdx.app.log(TAG, "update");
         platform.update(delta);
 
-        List<Block> destroyed = new ArrayList<Block>();
 
-        missedBalls.clear();
 
-        for (Ball ball : balls) {
+
+
+
+        for(Bonus bonus : bonuses) {
+            if(bonusPlatformIntersection(bonus,platform)|| (bonus.getPosition().y > GAME_HEIGHT * 2)){
+                destroyedBonuses.add(bonus);
+            }
+        }
+
+
+
+        for (Ball ball : balls)
             ball.update(delta);
 
+        for (Ball ball : balls)
+            ballWallIntersection(ball);
+        for (Ball ball : balls) {
             float ballAngle = ball.getAngle();
             for (Block block : level.getBlocks()) {
                 if (block.intersect(ball, ballAngle)) {
                     score += block.getScore();
-                    destroyed.add(block);
+                    destroyedBlocks.add(block);
+                    if (random.nextDouble() < BONUS_PROBABILITY)
+                        bonuses.add(bonusFactory.getBonus(block.getPosition()));
                 }
             }
-
-            ballWallIntersection(ball);
         }
-
+        for (Bonus bonus : bonuses)
+            bonus.update(delta);
+        for(Ball ball : addedBalls) {
+            if(balls.size()>MAX_BALLS_COUNT)
+                break;
+            balls.add(ball);
+            ball.start();
+        }
         if (balls.size() - missedBalls.size() == 0) {
             lives -= 1;
             if (isGame()){
@@ -144,14 +189,7 @@ public class GameWorld {
             }
         }
 
-        for (Ball ball : missedBalls) {
-            balls.remove(ball);
-        }
-
-        for (Block b : destroyed) {
-            level.remove(b);
-        }
-
+        cleanJunk();
         if (level.getDestructableBlocksCount() == 0)
             nextLevel();
 
@@ -164,7 +202,22 @@ public class GameWorld {
 
         //Gdx.app.log(TAG, String.valueOf(ball.getAngle()));
     }
+    private void cleanJunk() {
+        for (Ball ball : missedBalls) {
+            balls.remove(ball);
+        }
 
+        for (Block b : destroyedBlocks) {
+            level.remove(b);
+        }
+        for(Bonus bonus : destroyedBonuses) {
+            bonuses.remove(bonus);
+        }
+        missedBalls.clear();
+        destroyedBlocks.clear();
+        destroyedBonuses.clear();
+        addedBalls.clear();
+    }
     public Platform getPlatform(){
         return platform;
     }
@@ -172,6 +225,7 @@ public class GameWorld {
     public List<Ball> getBalls() {
         return balls;
     }
+    public List<Bonus> getBonuses() { return bonuses; }
 
     public int getLives() {
         return lives;
@@ -187,5 +241,11 @@ public class GameWorld {
 
     public boolean isGame() {
         return lives > 0;
+    }
+    public void addLife() {
+        lives++;
+    }
+    public List<Ball> getAddedBalls() {
+        return addedBalls;
     }
 }

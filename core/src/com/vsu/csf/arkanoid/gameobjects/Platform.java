@@ -57,7 +57,7 @@ public class Platform {
 
     public void update(float delta) {
         position.x += speed * move * delta;
-        boundingRectangle.set(position.x - width / 2, position.y - height / 2, width, height);
+        resetBoundingRectangle();
     }
 
     public void moveLeft() {
@@ -74,5 +74,21 @@ public class Platform {
 
     public Rectangle getBoundingRectangle() {
         return boundingRectangle;
+    }
+
+    public void increaseSize() {
+        if(width<GameWorld.INIT_PLATFORM_WIDTH*4) {
+            width *= 2;
+            resetBoundingRectangle();
+        }
+    }
+    public void decreaseSize() {
+        if(width>GameWorld.INIT_PLATFORM_WIDTH/4) {
+            width /= 2;
+            resetBoundingRectangle();
+        }
+    }
+    private void resetBoundingRectangle() {
+        boundingRectangle.set(position.x - width / 2, position.y - height / 2, width, height);
     }
 }

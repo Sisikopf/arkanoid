@@ -2,6 +2,7 @@ package com.vsu.csf.arkanoid.gameobjects;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import com.vsu.csf.arkanoid.gameworld.GameWorld;
 
 import static com.badlogic.gdx.math.MathUtils.*;
 
@@ -77,5 +78,14 @@ public class Ball {
 
     public Circle getBoundingCircle() {
         return boundingCircle;
+    }
+
+    public void increaseSpeed() {
+        if(speed< GameWorld.INIT_BALL_SPEED*4)
+        speed*=2;
+    }
+    public void decreaseSpeed() {
+        if(speed> GameWorld.INIT_BALL_SPEED/4)
+            speed/=2;
     }
 }

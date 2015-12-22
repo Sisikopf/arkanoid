@@ -1,4 +1,4 @@
-package com.vsu.csf.arkanoid.gameobjects;
+package com.vsu.csf.arkanoid.gameobjects.block;
 
 /**
  * Created by Andrey on 19.12.2015.

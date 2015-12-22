@@ -1,8 +1,9 @@
-package com.vsu.csf.arkanoid.gameobjects;
+package com.vsu.csf.arkanoid.gameobjects.block;
 
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.vsu.csf.arkanoid.gameobjects.Ball;
 
 import static com.badlogic.gdx.math.MathUtils.sin;
 

@@ -1,7 +1,8 @@
-package com.vsu.csf.arkanoid.gameobjects;
+package com.vsu.csf.arkanoid.gameobjects.block;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.vsu.csf.arkanoid.gameobjects.Ball;
 
 /**
  * Created by Andrey on 19.12.2015.

@@ -1,6 +1,10 @@
 package com.vsu.csf.arkanoid.gameobjects;
 
 import com.badlogic.gdx.Gdx;
+import com.vsu.csf.arkanoid.gameobjects.block.Block;
+import com.vsu.csf.arkanoid.gameobjects.block.BlockType;
+import com.vsu.csf.arkanoid.gameobjects.block.DestructableBlock;
+import com.vsu.csf.arkanoid.gameobjects.block.UndestructableBlock;
 
 import java.io.*;
 import java.util.ArrayList;
