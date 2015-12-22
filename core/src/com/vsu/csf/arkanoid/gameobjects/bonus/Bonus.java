@@ -31,7 +31,6 @@ public abstract class Bonus {
 
     public float getHeight() {
         return height;
-
     }
 
     public void setPosition(Vector2 position) {

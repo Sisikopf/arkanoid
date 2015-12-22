@@ -138,7 +138,7 @@ public class GameRenderer {
 
     private void drawBonuses(List<Bonus> bonusList) {
         for (Bonus bonus : bonusList) {
-            TextureRegion region = AssetLoader.heavyBlock3;
+            TextureRegion region = AssetLoader.bonus;
             batcher.draw(region, bonus.getPosition().x, bonus.getPosition().y, bonus.getWidth(), bonus.getHeight());
         }
     }

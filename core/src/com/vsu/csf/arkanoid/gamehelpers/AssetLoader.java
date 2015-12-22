@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  */
 public class AssetLoader {
     public static Texture texture;
-    public static TextureRegion bg, platform, ball,
+    public static TextureRegion bg, platform, ball, bonus, life,
             undestructableBlock, lightBlock,
             mediumBlock1, mediumBlock2,
             heavyBlock1, heavyBlock2, heavyBlock3;
@@ -22,22 +22,38 @@ public class AssetLoader {
         texture = new Texture("textures.png");
         texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
-        bg = new TextureRegion(texture, 0, 0, 18, 18);
+        bg = new TextureRegion(texture, 0, 0, 600, 600);
+        bg.flip(false, true);
 
-        platform = new TextureRegion(texture, 18, 0, 30, 5);
+        platform = new TextureRegion(texture, 890, 0, 120, 20);
+        platform.flip(false, true);
 
-        ball = new TextureRegion(texture, 48, 0, 30, 30);
+        bonus = new TextureRegion(texture, 1010, 0, 100, 100);
+        bonus.flip(false, true);
 
-        undestructableBlock = new TextureRegion(texture, 78, 0, 40, 20);
+        life = new TextureRegion(texture, 1110, 50, 50, 50);
+        life.flip(false, true);
 
-        lightBlock = new TextureRegion(texture, 118, 0, 40, 20);
+        ball = new TextureRegion(texture, 840, 0, 50, 50);
+        ball.flip(false, true);
 
-        mediumBlock1 = new TextureRegion(texture, 158, 0, 40, 20);
-        mediumBlock2 = new TextureRegion(texture, 158, 20, 40, 20);
+        undestructableBlock = new TextureRegion(texture, 780, 0, 60, 30);
+        undestructableBlock.flip(true, true);
 
-        heavyBlock1 = new TextureRegion(texture, 198, 0, 40, 20);
-        heavyBlock2 = new TextureRegion(texture, 198, 20, 40, 20);
-        heavyBlock3 = new TextureRegion(texture, 198, 40, 40, 20);
+        lightBlock = new TextureRegion(texture, 600, 0, 60, 30);
+        lightBlock.flip(false, true);
+
+        mediumBlock1 = new TextureRegion(texture, 660, 0, 60, 30);
+        mediumBlock1.flip(false, true);
+        mediumBlock2 = new TextureRegion(texture, 660, 30, 60, 30);
+        mediumBlock2.flip(false, true);
+
+        heavyBlock1 = new TextureRegion(texture, 720, 0, 60, 30);
+        heavyBlock1.flip(false, true);
+        heavyBlock2 = new TextureRegion(texture, 720, 30, 60, 30);
+        heavyBlock2.flip(false, true);
+        heavyBlock3 = new TextureRegion(texture, 720, 60, 60, 30);
+        heavyBlock3.flip(false, true);
 
         font = new BitmapFont(Gdx.files.internal("font/text.fnt"));
         font.getData().setScale(.25f, -.25f);

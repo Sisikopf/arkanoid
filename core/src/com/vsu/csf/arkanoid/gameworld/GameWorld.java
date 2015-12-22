@@ -49,8 +49,6 @@ public class GameWorld {
     private List<Ball> addedBalls;
     private Level level;
 
-
-
     private int levelNum;
 
     private int lives;
@@ -102,6 +100,7 @@ public class GameWorld {
         }
         return false;
     }
+
     private void ballWallIntersection(Ball ball) {
         float angle = ball.getAngle();
 
@@ -143,25 +142,15 @@ public class GameWorld {
         //Gdx.app.log(TAG, "update");
         platform.update(delta);
 
-
-
-
-
-
         for(Bonus bonus : bonuses) {
             if(bonusPlatformIntersection(bonus,platform)|| (bonus.getPosition().y > GAME_HEIGHT * 2)){
                 destroyedBonuses.add(bonus);
             }
         }
 
-
-
-        for (Ball ball : balls)
+        for (Ball ball : balls){
             ball.update(delta);
-
-        for (Ball ball : balls)
             ballWallIntersection(ball);
-        for (Ball ball : balls) {
             float ballAngle = ball.getAngle();
             for (Block block : level.getBlocks()) {
                 if (block.intersect(ball, ballAngle)) {
