@@ -175,6 +175,7 @@ public class GameWorld {
                 balls.add(new Ball(INIT_BALL_RADIUS, GAME_WIDTH / 2,
                         GAME_HEIGHT - PLATFORM_HEIGHT - INIT_BALL_RADIUS, INIT_BALL_SPEED, INIT_BALL_ANGLE, platform));
                 platform.setPosition(GAME_WIDTH / 2);
+                platform.setWidth(INIT_PLATFORM_WIDTH);
             }
         }
 
@@ -200,7 +201,7 @@ public class GameWorld {
             level.remove(b);
         }
         for(Bonus bonus : destroyedBonuses) {
-            bonuses.remove(bonus);
+             bonuses.remove(bonus);
         }
         missedBalls.clear();
         destroyedBlocks.clear();

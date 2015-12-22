@@ -39,7 +39,7 @@ public abstract class Bonus {
 
     public void update(double delta) {
         position.y+=delta*SPEED;
-        boundingRectangle.set(position.x - width / 2, position.y - height / 2, width, height);
+        boundingRectangle.set(position.x, position.y, width, height);
     }
     public abstract void action(GameWorld world);
 
