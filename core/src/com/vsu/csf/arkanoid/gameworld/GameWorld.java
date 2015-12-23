@@ -21,7 +21,7 @@ import static com.badlogic.gdx.math.MathUtils.sin;
  */
 public class GameWorld {
     private final static String TAG = "GameWorld";
-    private final static double BONUS_PROBABILITY = 0.1;
+    private final static double BONUS_PROBABILITY = 1;
     private final static int MAX_BALLS_COUNT = 4;
     public final static float GAME_HEIGHT = 300;
     public final static float GAME_WIDTH = 300;
