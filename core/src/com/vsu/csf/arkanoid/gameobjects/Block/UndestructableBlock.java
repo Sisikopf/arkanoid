@@ -3,6 +3,7 @@ package com.vsu.csf.arkanoid.gameobjects.block;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.vsu.csf.arkanoid.gamehelpers.AssetLoader;
 import com.vsu.csf.arkanoid.gameobjects.Ball;
 
 import static com.badlogic.gdx.math.MathUtils.sin;
@@ -26,6 +27,7 @@ public class UndestructableBlock extends Block {
     @Override
     public boolean intersect(Ball ball, float angle) {
         if (Intersector.overlaps(ball.getBoundingCircle(), top)) {
+//<<<<<<< Updated upstream
             if (Intersector.overlaps(ball.getBoundingCircle(), left)) {
                 ball.setAngle((float)Math.PI * Math.signum(-angle) + angle);
             } else if (Intersector.overlaps(ball.getBoundingCircle(), right)) {
@@ -34,6 +36,7 @@ public class UndestructableBlock extends Block {
                 ball.setAngle(-angle);
                 ball.setPosition(ball.getPosition().x, position.y - ball.getRadius());
             }
+            AssetLoader.collisionSound.play();
         } else if (Intersector.overlaps(ball.getBoundingCircle(), bottom)) {
             if (Intersector.overlaps(ball.getBoundingCircle(), left)) {
                 ball.setAngle((float)Math.PI * Math.signum(-angle) + angle);
@@ -43,15 +46,29 @@ public class UndestructableBlock extends Block {
                 ball.setAngle(-angle);
                 ball.setPosition(ball.getPosition().x, position.y + height + ball.getRadius());
             }
+            AssetLoader.collisionSound.play();
         } else if (Intersector.overlaps(ball.getBoundingCircle(), left)) {
             if (angle == 0) ball.setAngle((float)Math.PI);
             else ball.setAngle(Math.signum(angle) * (float)Math.PI - angle);
+//=======
+            ball.setAngle(- angle);
+            AssetLoader.collisionSound.play();
+            ball.setPosition(ball.getPosition().x, position.y - ball.getRadius());
+        } else if (Intersector.overlaps(ball.getBoundingCircle(), bottom)) {
+            ball.setAngle(- angle);
+            ball.setPosition(ball.getPosition().x, position.y + height + ball.getRadius());
+            AssetLoader.collisionSound.play();
+        } else if (Intersector.overlaps(ball.getBoundingCircle(), left))  {
+            ball.setAngle(Math.abs((float)Math.PI - Math.abs(angle)) * Math.signum(sin(angle)));
+//>>>>>>> Stashed changes
             ball.setPosition(position.x - ball.getRadius(), ball.getPosition().y);
+            AssetLoader.collisionSound.play();
         } else if (Intersector.overlaps(ball.getBoundingCircle(), right)){
             if (angle == Math.PI || angle == -Math.PI)
                 ball.setAngle(0);
             else ball.setAngle(Math.signum(angle) * (float)Math.PI - angle);
             ball.setPosition(position.x + width + ball.getRadius(), ball.getPosition().y);
+            AssetLoader.collisionSound.play();
         }
         return false;
     }
