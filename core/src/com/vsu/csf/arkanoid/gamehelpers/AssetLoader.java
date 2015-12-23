@@ -1,6 +1,8 @@
 package com.vsu.csf.arkanoid.gamehelpers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.backends.lwjgl.audio.Mp3;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -16,7 +18,10 @@ public class AssetLoader {
             heavyBlock1, heavyBlock2, heavyBlock3;
 
     public static BitmapFont font, shadow;
-
+    public static Sound collisionSound;
+    public static Sound bonusSound;
+    public static Sound gamewinSound;
+    public static Sound gameoverSound;
     public static void load() {
 
         texture = new Texture("textures.png");
@@ -59,6 +64,11 @@ public class AssetLoader {
         font.getData().setScale(.25f, -.25f);
         shadow = new BitmapFont(Gdx.files.internal("font/shadow.fnt"));
         shadow.getData().setScale(.25f, -.25f);
+
+        collisionSound = Gdx.audio.newSound(Gdx.files.internal("data/collision.wav"));
+        gamewinSound = Gdx.audio.newSound(Gdx.files.internal("data/win.wav"));
+        gameoverSound = Gdx.audio.newSound(Gdx.files.internal("data/gameover.wav"));
+        bonusSound = Gdx.audio.newSound(Gdx.files.internal("data/bonus.wav"));
     }
 
     public static void dispose() {
