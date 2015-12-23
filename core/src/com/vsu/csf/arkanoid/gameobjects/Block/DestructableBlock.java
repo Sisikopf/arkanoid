@@ -48,19 +48,34 @@ public class DestructableBlock extends Block {
     @Override
     public boolean intersect(Ball ball, float angle) {
         if (Intersector.overlaps(ball.getBoundingCircle(), top)) {
-            ball.setAngle(- angle);
-            ball.setPosition(ball.getPosition().x, position.y - ball.getRadius());
+            if (Intersector.overlaps(ball.getBoundingCircle(), left)) {
+                ball.setAngle((float)Math.PI * Math.signum(-angle) + angle);
+            } else if (Intersector.overlaps(ball.getBoundingCircle(), right)) {
+                ball.setAngle((float)Math.PI * Math.signum(-angle) + angle);
+            } else {
+                ball.setAngle(-angle);
+                ball.setPosition(ball.getPosition().x, position.y - ball.getRadius());
+            }
             health--;
         } else if (Intersector.overlaps(ball.getBoundingCircle(), bottom)) {
-            ball.setAngle(- angle);
-            ball.setPosition(ball.getPosition().x, position.y + height + ball.getRadius());
+            if (Intersector.overlaps(ball.getBoundingCircle(), left)) {
+                ball.setAngle((float)Math.PI * Math.signum(-angle) + angle);
+            } else if (Intersector.overlaps(ball.getBoundingCircle(), right)) {
+                ball.setAngle((float)Math.PI * Math.signum(-angle) + angle);
+            } else {
+                ball.setAngle(-angle);
+                ball.setPosition(ball.getPosition().x, position.y + height + ball.getRadius());
+            }
             health--;
         } else if (Intersector.overlaps(ball.getBoundingCircle(), left))  {
-            ball.setAngle(Math.abs((float)Math.PI - Math.abs(angle)) * Math.signum(sin(angle)));
+            if (angle == 0) ball.setAngle((float)Math.PI);
+            else ball.setAngle(Math.signum(angle) * (float)Math.PI - angle);
             ball.setPosition(position.x - ball.getRadius(), ball.getPosition().y);
             health--;
         } else if (Intersector.overlaps(ball.getBoundingCircle(), right)){
-            ball.setAngle(Math.abs((float)Math.PI - Math.abs(angle)) * Math.signum(sin(angle)));
+            if (angle == Math.PI || angle == -Math.PI)
+                ball.setAngle(0);
+            else ball.setAngle(Math.signum(angle) * (float)Math.PI - angle);
             ball.setPosition(position.x + width + ball.getRadius(), ball.getPosition().y);
             health--;
         }
