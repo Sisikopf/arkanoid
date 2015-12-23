@@ -1,6 +1,7 @@
 package com.vsu.csf.arkanoid.gameworld;
 
 import com.badlogic.gdx.math.*;
+import com.vsu.csf.arkanoid.gamehelpers.AssetLoader;
 import com.vsu.csf.arkanoid.gameobjects.bonus.BonusFactory;
 import com.vsu.csf.arkanoid.gameobjects.Ball;
 import com.vsu.csf.arkanoid.gameobjects.block.Block;
@@ -21,7 +22,7 @@ import static com.badlogic.gdx.math.MathUtils.sin;
  */
 public class GameWorld {
     private final static String TAG = "GameWorld";
-    private final static double BONUS_PROBABILITY = 0.1;
+    private final static double BONUS_PROBABILITY = 0.2;
     private final static int MAX_BALLS_COUNT = 4;
     public final static float GAME_HEIGHT = 300;
     public final static float GAME_WIDTH = 300;
@@ -101,6 +102,7 @@ public class GameWorld {
     private boolean bonusPlatformIntersection(Bonus bonus, Platform platform) {
         if(Intersector.overlaps(bonus.getBoundingRectangle(),platform.getBoundingRectangle())) {
             bonus.action(this);
+            AssetLoader.bonusSound.play();
             return true;
         }
         return false;
@@ -115,6 +117,7 @@ public class GameWorld {
             else
                 ball.setAngle(- angle);
             ball.setPosition(ball.getPosition().x, ball.getRadius());
+            AssetLoader.collisionSound.play();
         } else
         if (Intersector.overlaps(ball.getBoundingCircle(), platform.getBoundingRectangle())) {
             float k = (ball.getPosition().x - platform.getPosition().x) / platform.getWidth() * 2 / 3;
@@ -122,9 +125,11 @@ public class GameWorld {
             angle = angle + (angle > (float)Math.PI / 2 ? (float)Math.PI - angle : angle) * k;
             ball.setAngle(angle);
             ball.setPosition(ball.getPosition().x, GAME_HEIGHT - platform.getHeight() - ball.getRadius());
+            AssetLoader.collisionSound.play();
         } else
         if (Intersector.overlaps(ball.getBoundingCircle(), bottom)) {
             missedBalls.add(ball);
+            AssetLoader.collisionSound.play();
         }
 
         if (Intersector.overlaps(ball.getBoundingCircle(), left)) {
@@ -132,11 +137,13 @@ public class GameWorld {
             if (angle == Math.PI / 2 || angle == -Math.PI / 2 || angle == Math.PI || angle == -Math.PI)
                 ball.setAngle(0);
             else ball.setAngle(Math.signum(angle) * (float)Math.PI - angle);
+            AssetLoader.collisionSound.play();
         } else
         if (Intersector.overlaps(ball.getBoundingCircle(), right)) {
             ball.setPosition(GAME_WIDTH - ball.getRadius(), ball.getPosition().y);
             if (angle == 0) ball.setAngle((float)Math.PI);
             else ball.setAngle(Math.signum(angle) * (float)Math.PI - angle);
+            AssetLoader.collisionSound.play();
         }
     }
 
@@ -179,6 +186,8 @@ public class GameWorld {
                 platform.setPosition(GAME_WIDTH / 2);
                 platform.setWidth(INIT_PLATFORM_WIDTH);
             }
+            else
+                AssetLoader.gameoverSound.play();
         }
 
         cleanJunk();
@@ -186,7 +195,12 @@ public class GameWorld {
         {
             if (levelNum < LEVEL_COUNT)
                 nextLevel();
-            else win = true;
+            else
+            {
+                win = true;
+                AssetLoader.gamewinSound.play();
+            }
+
         }
 
         if (Intersector.overlaps(platform.getBoundingRectangle(), left)) {
