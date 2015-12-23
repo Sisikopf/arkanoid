@@ -89,7 +89,16 @@ public class GameRenderer {
     }
 
     private void drawUI() {
-        if (!world.isGame()) {
+        if (world.isWin()) {
+            // Win message
+            String winMessage = String.format("YOU WIN!\nYOUR SCORE: %d", world.getScore());
+            GlyphLayout layout = new GlyphLayout(AssetLoader.font, winMessage);
+
+            AssetLoader.shadow.draw(batcher, winMessage, GameWorld.GAME_WIDTH / 2 - layout.width / 2 + 1,
+                    GameWorld.GAME_HEIGHT / 5 * 2 + 1);
+            AssetLoader.font.draw(batcher, winMessage, GameWorld.GAME_WIDTH / 2 - layout.width / 2,
+                    GameWorld.GAME_HEIGHT / 5 * 2);
+        } else if (!world.isGame()) {
             // Game Over message
             String gameOver = String.format("GAME OVER\nYOUR SCORE: %d", world.getScore());
             GlyphLayout layout = new GlyphLayout(AssetLoader.font, gameOver);
@@ -98,13 +107,12 @@ public class GameRenderer {
                     GameWorld.GAME_HEIGHT / 5 * 2 + 1);
             AssetLoader.font.draw(batcher, gameOver, GameWorld.GAME_WIDTH / 2 - layout.width / 2,
                     GameWorld.GAME_HEIGHT / 5 * 2);
-        }
-        else {
+        } else {
             // Score
             String score = String.valueOf("Score: " + world.getScore());
             AssetLoader.shadow.draw(batcher, score, SCORE_POS_X + 1, SCORE_POS_Y + 1);
             AssetLoader.font.draw(batcher, score, SCORE_POS_X, SCORE_POS_Y);
-            //
+            // Lives
             String lives = String.valueOf("Lives: " + world.getLives());
             AssetLoader.shadow.draw(batcher, lives, 3*(LIVES_POS_X + 1)/4, SCORE_POS_Y + 1);
             AssetLoader.font.draw(batcher, lives, 3*LIVES_POS_X/4, SCORE_POS_Y);

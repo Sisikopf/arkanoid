@@ -37,22 +37,22 @@ public class AssetLoader {
         ball = new TextureRegion(texture, 840, 0, 50, 50);
         ball.flip(false, true);
 
-        undestructableBlock = new TextureRegion(texture, 780, 0, 60, 30);
-        undestructableBlock.flip(true, true);
+        undestructableBlock = new TextureRegion(texture, 781, 0, 59, 30);
+        undestructableBlock.flip(false, true);
 
         lightBlock = new TextureRegion(texture, 600, 0, 60, 30);
         lightBlock.flip(false, true);
 
-        mediumBlock1 = new TextureRegion(texture, 660, 0, 60, 30);
+        mediumBlock1 = new TextureRegion(texture, 661, 0, 59, 30);
         mediumBlock1.flip(false, true);
-        mediumBlock2 = new TextureRegion(texture, 660, 30, 60, 30);
+        mediumBlock2 = new TextureRegion(texture, 661, 30, 59, 30);
         mediumBlock2.flip(false, true);
 
-        heavyBlock1 = new TextureRegion(texture, 720, 0, 60, 30);
+        heavyBlock1 = new TextureRegion(texture, 721, 0, 59, 30);
         heavyBlock1.flip(false, true);
-        heavyBlock2 = new TextureRegion(texture, 720, 30, 60, 30);
+        heavyBlock2 = new TextureRegion(texture, 721, 30, 59, 30);
         heavyBlock2.flip(false, true);
-        heavyBlock3 = new TextureRegion(texture, 720, 60, 60, 30);
+        heavyBlock3 = new TextureRegion(texture, 721, 60, 59, 30);
         heavyBlock3.flip(false, true);
 
         font = new BitmapFont(Gdx.files.internal("font/text.fnt"));

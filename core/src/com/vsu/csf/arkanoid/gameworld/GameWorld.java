@@ -37,6 +37,8 @@ public class GameWorld {
     public final static float BLOCK_WIDTH = 18.75f;
     public final static float BLOCK_HEIGHT = 9.375f;
 
+    public final static int LEVEL_COUNT = 5;
+
     private BonusFactory bonusFactory;
 
     private Random random;
@@ -53,6 +55,8 @@ public class GameWorld {
 
     private int lives;
     private int score;
+
+    private boolean win = false;
 
     private Rectangle top, left, right, bottom;
 
@@ -82,6 +86,7 @@ public class GameWorld {
         level = Level.loadLevel(String.format("levels/%d.txt", levelNum), BLOCK_WIDTH, BLOCK_HEIGHT);
         lives = 3;
         score = 0;
+        win = false;
     }
 
     public void nextLevel() {
@@ -124,17 +129,14 @@ public class GameWorld {
 
         if (Intersector.overlaps(ball.getBoundingCircle(), left)) {
             ball.setPosition(ball.getRadius(), ball.getPosition().y);
-            if (angle == Math.PI / 2 || angle == -Math.PI / 2)
+            if (angle == Math.PI / 2 || angle == -Math.PI / 2 || angle == Math.PI || angle == -Math.PI)
                 ball.setAngle(0);
-            else
-                ball.setAngle(Math.abs((float)Math.PI - Math.abs(angle)) * Math.signum(sin(angle)));
+            else ball.setAngle(Math.signum(angle) * (float)Math.PI - angle);
         } else
         if (Intersector.overlaps(ball.getBoundingCircle(), right)) {
             ball.setPosition(GAME_WIDTH - ball.getRadius(), ball.getPosition().y);
-            if (angle == Math.PI / 2 || angle == -Math.PI / 2)
-                ball.setAngle(-(float)Math.PI);
-            else
-                ball.setAngle(Math.abs((float)Math.PI - Math.abs(angle)) * Math.signum(sin(angle)));
+            if (angle == 0) ball.setAngle((float)Math.PI);
+            else ball.setAngle(Math.signum(angle) * (float)Math.PI - angle);
         }
     }
 
@@ -181,7 +183,11 @@ public class GameWorld {
 
         cleanJunk();
         if (level.getDestructableBlocksCount() == 0)
-            nextLevel();
+        {
+            if (levelNum < LEVEL_COUNT)
+                nextLevel();
+            else win = true;
+        }
 
         if (Intersector.overlaps(platform.getBoundingRectangle(), left)) {
             platform.setPosition(platform.getWidth() / 2);
@@ -237,5 +243,9 @@ public class GameWorld {
     }
     public List<Ball> getAddedBalls() {
         return addedBalls;
+    }
+
+    public boolean isWin() {
+        return win;
     }
 }
