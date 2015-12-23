@@ -197,8 +197,10 @@ public class GameWorld {
                 nextLevel();
             else
             {
-                win = true;
-                AssetLoader.gamewinSound.play();
+                if (!win) {
+                    win = true;
+                    AssetLoader.gamewinSound.play();
+                }
             }
 
         }

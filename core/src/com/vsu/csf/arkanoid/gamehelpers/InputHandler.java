@@ -20,6 +20,8 @@ public class InputHandler implements InputProcessor {
         this.world = world;
     }
 
+    public static final float GAP = 10;
+
     @Override
     public boolean keyDown(int keycode) {
         switch (keycode) {
@@ -54,7 +56,8 @@ public class InputHandler implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
+        world.getBalls().get(0).start();
+        return true;
     }
 
     @Override
@@ -69,7 +72,15 @@ public class InputHandler implements InputProcessor {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        return false;
+        float x = world.getPlatform().getPosition().x;
+        if (Math.abs(screenX / 2 - x) > GAP)
+            if (screenX / 2 < x) {
+                world.getPlatform().moveLeft();
+            } else {
+                world.getPlatform().moveRight();
+            }
+        else world.getPlatform().stop();
+        return true;
     }
 
     @Override
